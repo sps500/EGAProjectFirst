@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Presentation</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to My Project</h1>
+    </header>
+    <section class="slide" id="slide1">
+      <h2>Introduction</h2>
+      <!-- <div class="circle"></div> -->
+      <div id="scene"></div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+      <script>
+        // Инициализация сцены
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById("scene").appendChild(renderer.domElement);
+
+        // Увеличение конуса на всю страницу
+        const geometry = new THREE.ConeGeometry(20, 50, 10, 5, true); // Увеличенный размер конуса
+        const material = new THREE.MeshBasicMaterial({
+          color: 0xffff00,
+          wireframe: true,
+        });
+        const cone = new THREE.Mesh(geometry, material);
+        scene.add(cone);
+
+        // Загрузка изображения ребенка
+        const loader = new THREE.TextureLoader();
+        loader.load(
+          "img/free-icon-daycare-12963327.png", // Путь к вашему изображению
+          (texture) => {
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            sprite.scale.set(10, 10, 1); // Увеличение размера спрайта
+            sprite.position.set(0, -10, 0); // Размещение в центре конуса
+            scene.add(sprite);
+          },
+          undefined,
+          (error) => console.error("Ошибка загрузки изображения:", error)
+        );
+
+        // Камера
+        camera.position.set(0, 0, 80); // Камера отдалена, чтобы охватить конус целиком
+        camera.lookAt(0, 0, 0);
+
+        // Анимация (медленное вращение конуса)
+        function animate() {
+          requestAnimationFrame(animate);
+          cone.rotation.y += 0.002; // Уменьшенная скорость вращения
+          renderer.render(scene, camera);
+        }
+        animate();
+
+        // Подстройка размера при изменении окна
+        window.addEventListener("resize", () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      </script>
+
+      <p>This project demonstrates...</p>
+    </section>
+    <section class="slide" id="slide2">
+      <h2>Features</h2>
+      <p>Here are the main features:</p>
+      <ul>
+        <li>Interactive design</li>
+        <li>3D visuals</li>
+        <li>Responsive layout</li>
+      </ul>
+    </section>
+    <section class="slide" id="slide3">
+      <h2>Conclusion</h2>
+      <p>Thank you for watching!</p>
+    </section>
+    <footer>
+      <p>&copy; 2024 Your Name</p>
+    </footer>
+  </body>
+</html>
